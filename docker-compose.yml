@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: shipping-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: shipping
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    image: migrate/migrate
+    container_name: shipping-migrate
+    volumes:
+      - ./migrations:/migrations
+    command: [
+      "-path", "/migrations",
+      "-database", "postgres://postgres:postgres@postgres:5432/shipping?sslmode=disable",
+      "up"
+    ]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  provider-a-mock:
+    build:
+      context: ./docker/mock-servers
+      dockerfile: Dockerfile
+    container_name: provider-a-mock
+    environment:
+      PROVIDER_NAME: A
+      PORT: 8080
+    ports:
+      - "8081:8080"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  provider-b-mock:
+    build:
+      context: ./docker/mock-servers
+      dockerfile: Dockerfile
+    container_name: provider-b-mock
+    environment:
+      PROVIDER_NAME: B
+      PORT: 8080
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shipping-api
+    ports:
+      - "38089:8080"
+    environment:
+      PORT: 8080
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: shipping
+      DB_SSLMODE: disable
+      PROVIDER_A_URL: http://provider-a-mock:8080/createShipping
+      PROVIDER_B_URL: http://provider-b-mock:8080/createShipping
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      provider-a-mock:
+        condition: service_healthy
+      provider-b-mock:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

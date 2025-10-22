@@ -1,0 +1,102 @@
+{
+  "weight": {
+    "value": 1000,
+    "unit": "Grams"
+  },
+  "shipper": {
+    "contact": {
+      "name": "ABC Associates",
+      "mobileNumber": "0506356566",
+      "phoneNumber": "041234567",
+      "emailAddress": "orders@test.com",
+      "companyName": "ABC Associates"
+    },
+    "address": {
+      "line1": "Umm Rammool",
+      "line2": "",
+      "city": "Dubai",
+      "state": "",
+      "countryCode": "AE",
+      "zipCode": "00000"
+    },
+    "referenceNo1": "ShipperReference1",
+    "referenceNo2": "ShipperReference2"
+  },
+  "consignee": {
+    "contact": {
+      "name": "John Doe",
+      "mobileNumber": "+919441234567",
+      "phoneNumber": "+919441234567",
+      "emailAddress": "test@test.com",
+      "companyName": "John Doe"
+    },
+    "address": {
+      "line1": "Test Address",
+      "line2": "",
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "countryCode": "IN",
+      "zipCode": "1001"
+    },
+    "referenceNo1": "ConsigneeReference1",
+    "referenceNo2": "ConsigneeReference2"
+  },
+  "dimensions": {
+    "length": 10,
+    "height": 10,
+    "width": 10,
+    "unit": "Meter"
+  },
+  "account": {
+    "number": "123",
+    "username": "testuser",
+    "password": "testpass"
+  },
+  "productCode": "International",
+  "serviceType": "None",
+  "isInsured": true,
+  "customsDeclarations": [
+    {
+      "reference": "ReferenceNumber",
+      "description": "Medicine",
+      "countryOfOrigin": "AE",
+      "weight": 1000,
+      "dimensions": {
+        "length": 10,
+        "height": 10,
+        "width": 10,
+        "unit": "Meter"
+      },
+      "quantity": 1,
+      "hsCode": "3004909",
+      "value": 250
+    }
+  ],
+  "declaredValue": {
+    "amount": 250,
+    "currency": "AED"
+  },
+  "numberOfPieces": 1,
+  "referenceNumbers": [
+    "ShipmentReferenceNo1",
+    "ShipmentReferenceNo2",
+    "ShipmentReferenceNo3",
+    "ShipmentReferenceNo4"
+  ],
+  "specialNotes": "Handle with care",
+  "remarks": "",
+  "deliveryType": "DoorToDoor",
+  "contentType": "NonDocument",
+  "isCod": false,
+  "codAmount": 0,
+  "packages": [
+    {
+      "width": 10,
+      "height": 10,
+      "length": 10,
+      "weight": 0.5,
+      "pieces": 1,
+      "value": 250
+    }
+  ]
+}
